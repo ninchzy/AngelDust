@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { useCatalog } from '../context/CatalogContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { FREE_SHIPPING_FROM, GIFT_WRAP_COST, MAX_QTY } from '../config.js';
-import { cartTotals, linePrices, money, photosFor, plural, promoApplies, sizeLabel } from '../utils.js';
+import { cartTotals, linePrices, money, photosFor, plural, promoApplies, sizeLabel, smallPhoto } from '../utils.js';
 
 const banner = (
     <section className="page-banner">
@@ -134,7 +134,7 @@ function CartLine({ line }) {
     return (
         <div className={`cart-item${leaving ? ' is-leaving' : ''}`}>
             <Link to={{ pathname: `/product/${p.slug}` }} state={{ variantId: v.id }} className="cart-thumb product-img" tabIndex={-1} aria-hidden="true">
-                {photo && <img src={photo.url} alt="" loading="lazy" />}
+                {photo && <img src={smallPhoto(photo.url)} alt="" loading="lazy" />}
             </Link>
             <div className="cart-info">
                 <h3><Link to={{ pathname: `/product/${p.slug}` }} state={{ variantId: v.id }}>{p.name}</Link></h3>

@@ -6,7 +6,7 @@ import { useToast } from '../context/ToastContext.jsx';
 import { useUI } from '../context/UIContext.jsx';
 import { useCatalog } from '../context/CatalogContext.jsx';
 import { FEATURED_PROMO } from '../config.js';
-import { copyText, darkVariants, discountedPrice, isOneSize, money, photosFor, promoApplies } from '../utils.js';
+import { copyText, darkVariants, discountedPrice, isOneSize, money, photoSrcSet, photosFor, promoApplies, smallPhoto } from '../utils.js';
 
 // organize: show the collections row (favourites page)
 // fadeOnUnfav: fade the card out before removing it (favourites page)
@@ -67,7 +67,7 @@ export default function ProductCard({ product: p, organize = false, fadeOnUnfav 
         <article className={`card${leaving ? ' is-leaving' : ''}`}>
             <Link to={productLink} className="card-media" tabIndex={-1} aria-hidden="true">
                 <div className="product-img">
-                    {photo && <img src={photo.url} alt="" loading="lazy" />}
+                    {photo && <img src={smallPhoto(photo.url)} srcSet={photoSrcSet(photo.url)} sizes="(max-width: 600px) 46vw, 280px" alt="" loading="lazy" />}
                 </div>
                 {p.tag && <span className="card-tag">{p.tag}</span>}
             </Link>

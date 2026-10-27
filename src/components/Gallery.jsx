@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { ChevronIcon } from './Icons.jsx';
+import { photoSrcSet, smallPhoto } from '../utils.js';
 
 // Product photo viewer: big photo with hover arrows (same style as the hero), swipe on touch,
 // ←/→ keys when focused, and clickable thumbnails underneath.
@@ -39,7 +40,7 @@ export default function Gallery({ photos, name }) {
                 <div className="gallery-track" style={{ transform: `translateX(-${current * 100}%)` }}>
                     {photos.map((p, i) => (
                         <div className="gallery-slide product-img" key={p.url} aria-hidden={i !== current}>
-                            <img src={p.url} alt={p.alt || name} loading={i === 0 ? 'eager' : 'lazy'} />
+                            <img src={p.url} srcSet={photoSrcSet(p.url)} sizes="(max-width: 900px) 100vw, 620px" alt={p.alt || name} loading={i === 0 ? 'eager' : 'lazy'} />
                         </div>
                     ))}
                 </div>
@@ -68,7 +69,7 @@ export default function Gallery({ photos, name }) {
                             aria-current={i === current}
                             onClick={() => setIndex(i)}
                         >
-                            <img src={p.url} alt="" loading="lazy" />
+                            <img src={smallPhoto(p.url)} alt="" loading="lazy" />
                         </button>
                     ))}
                 </div>

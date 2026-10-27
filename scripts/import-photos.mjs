@@ -5,8 +5,9 @@
 //
 // - <Product Name> must match the product's name in the database (letter case doesn't matter).
 // - <colour> must match one of that product's colours; number 1 is the card photo for that colour.
-// - Every photo is centre-cropped to the card shape (4:5) so all products line up, resized and saved as WebP
-//   in public/products/<product-slug>/.
+// - Every photo is centre-cropped to the card shape (4:5) so all products line up and saved as WebP
+//   in public/products/<product-slug>/ in two sizes: <name>.webp (960px, product page gallery)
+//   and <name>-480.webp (cards, thumbnails, cart — see smallPhoto() in src/utils.js).
 //
 // Usage: npm run photos
 import { readdir, mkdir, rm } from 'node:fs/promises';
@@ -17,8 +18,11 @@ import { pool } from '../server/db.js';
 
 const SOURCE = fileURLToPath(new URL('../product-photos/', import.meta.url));
 const OUTPUT = fileURLToPath(new URL('../public/products/', import.meta.url));
-const WIDTH = 960;
-const HEIGHT = 1200;   // 4:5, same as the product card
+const SIZES = [
+    { width: 960, height: 1200, suffix: '' },        // 4:5, same shape as the product card
+    { width: 480, height: 600, suffix: '-480' },
+];
+const WEBP = { quality: 78, effort: 6, smartSubsample: true };
 const IMAGE_TYPES = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
 
 const norm = s => s.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -49,12 +53,15 @@ for (const folder of folders) {
         const variant = variants.find(v => v.product_id === product.id && norm(v.name) === norm(colour));
         if (!variant) { warnings.push(`${folder.name}/${file}: "${product.name}" has no colour "${colour}".`); continue; }
 
-        const outName = `${slugify(colour)}-${number}.webp`;
-        await sharp(join(inDir, file))
-            .rotate()                                          // respect phone photo orientation
-            .resize(WIDTH, HEIGHT, { fit: 'cover', position: 'centre' })
-            .webp({ quality: 82 })
-            .toFile(join(outDir, outName));
+        const baseName = `${slugify(colour)}-${number}`;
+        const outName = `${baseName}.webp`;
+        for (const size of SIZES) {
+            await sharp(join(inDir, file))
+                .rotate()                                      // respect phone photo orientation
+                .resize(size.width, size.height, { fit: 'cover', position: 'centre' })
+                .webp(WEBP)
+                .toFile(join(outDir, `${baseName}${size.suffix}.webp`));
+        }
 
         rows.push({
             productId: product.id,

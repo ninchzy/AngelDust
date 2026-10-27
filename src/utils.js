@@ -10,6 +10,12 @@ export function photosFor(product, variantId) {
     return own.length ? own : product.images;
 }
 
+// The 480px copy that `npm run photos` makes next to every product photo (for cards, thumbnails, cart).
+export const smallPhoto = url => url.replace(/\.webp$/, '-480.webp');
+
+// srcset for product photos: the browser picks the 480px or 960px file for the space it has.
+export const photoSrcSet = url => `${smallPhoto(url)} 480w, ${url} 960w`;
+
 // Products that come in one size don't ask the shopper to pick one.
 export const isOneSize = product => product.sizes.length <= 1;
 

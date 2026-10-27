@@ -4,6 +4,8 @@
 
 Built with **React + Vite** (website), **Node.js + Express** (server) and **MySQL** (database).
 
+![Angel Dust home page: pink stitched category bar with scalloped hem, hero with a model in a strawberry-print lolita dress, and the first row of product cards](docs/screenshot-home.webp)
+
 ## Features
 
 - Product catalogue with categories, search, sorting and a page for every product (photo gallery, colours, sizes, size guide)
@@ -33,7 +35,7 @@ Then open <http://localhost:5173>.
 | --- | --- |
 | `npm run dev` | Website + server for development |
 | `npm run db:setup` | Create or upgrade the database (safe to re-run; keeps customer data) |
-| `npm run photos` | Crop and import photos from `product-photos/<Product Name>/<colour> <number>.jpg` |
+| `npm run photos` | Crop, resize (960px + 480px WebP) and import photos from `product-photos/<Product Name>/<colour> <number>.jpg` |
 | `npm run build` then `npm start` | Production build, served by the Node server |
 
 ## Project layout
